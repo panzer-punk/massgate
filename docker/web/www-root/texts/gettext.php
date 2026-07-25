@@ -1,4 +1,5 @@
-
+// this is gettext.php file
+// TODO: rewrite this file to lua to support gettext.php__ORIGINAL behavior
 
 Thank you for your interest in World in Conflict. 
 
