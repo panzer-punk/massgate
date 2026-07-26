@@ -1,6 +1,12 @@
 services:
   mysql:
-    image: mysql:8.0
+    # Connector/C 6.1 (Massgate) is from the MySQL 5.7 era; MySQL 8's
+    # default TLS handshake fails with "SSL connection error: unknown error number".
+    image: mysql:5.7
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+      - --skip-ssl
     ports:
       - 3307:3306
     environment:
@@ -11,6 +17,12 @@ services:
     volumes:
       - ./docker/mysql/databasestructure.sql:/docker-entrypoint-initdb.d/databasestructure.sql
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pp4nz3r_punk"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
     networks:
       massgate_network:
           aliases:
@@ -29,17 +41,20 @@ services:
     networks:
       - massgate_network
 
-  # massgate:
-  #   build:
-  #     context: .
-  #     dockerfile: docker/massgate.Dockerfile
-  #   ports:
-  #     - 3001:3001
-  #   networks:
-  #     - massgate_network
-  #   depends_on:
-  #     - mysql
-  #     - web
+  massgate:
+    build:
+      target: linux-runner
+      context: .
+      dockerfile: docker/massgate.Dockerfile
+    ports:
+      - 3001:3001
+    networks:
+      - massgate_network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      web:
+        condition: service_started
 
 networks:
   massgate_network:
