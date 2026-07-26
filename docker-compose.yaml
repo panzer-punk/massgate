@@ -10,10 +10,10 @@ services:
     ports:
       - 3307:3306
     environment:
-      MYSQL_ROOT_PASSWORD: "p4nz3r_punk"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_DATABASE: live
       MYSQL_USER: "massgateadmin"
-      MYSQL_PASSWORD: "8fesfsdBOrwe"
+      MYSQL_PASSWORD: "${MYSQL_WRITE_PASSWORD}"
     volumes:
       - ./docker/mysql/databasestructure.sql:/docker-entrypoint-initdb.d/databasestructure.sql
       - mysql_data:/var/lib/mysql
@@ -43,9 +43,12 @@ services:
 
   massgate:
     build:
-      target: linux-runner
+      target: "${MASSGATE_OS}-runner"
       context: .
       dockerfile: docker/massgate.Dockerfile
+    environment:
+      MYSQL_WRITE_PASSWORD: "${MYSQL_WRITE_PASSWORD}"
+      MYSQL_READ_PASSWORD: "${MYSQL_READ_PASSWORD}"
     ports:
       - 3001:3001
     networks:

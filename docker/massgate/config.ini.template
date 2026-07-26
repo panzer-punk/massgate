@@ -1,8 +1,8 @@
 [writedb]
 host=writedb.massgate.local
 user=massgateadmin
-password=8fesfsdBOrwe
+password=${MYSQL_WRITE_PASSWORD}
 [readdb]
 host=readdb.massgate.local
 user=massgateclient
-password=po389ef0sS
+password=${MYSQL_READ_PASSWORD}
