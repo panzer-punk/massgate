@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+: "${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}"
+: "${MYSQL_WRITE_PASSWORD:?MYSQL_WRITE_PASSWORD is required}"
+: "${MYSQL_READ_PASSWORD:?MYSQL_READ_PASSWORD is required}"
+
+mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" <<-EOSQL
+	CREATE DATABASE IF NOT EXISTS live;
+	GRANT ALL PRIVILEGES ON live.* TO 'massgateadmin'@'localhost' IDENTIFIED BY '${MYSQL_WRITE_PASSWORD}';
+	GRANT ALL PRIVILEGES ON live.* TO 'massgateadmin'@'%' IDENTIFIED BY '${MYSQL_WRITE_PASSWORD}';
+	GRANT SELECT ON live.* TO 'massgateclient'@'localhost' IDENTIFIED BY '${MYSQL_READ_PASSWORD}';
+	GRANT SELECT ON live.* TO 'massgateclient'@'%' IDENTIFIED BY '${MYSQL_READ_PASSWORD}';
+	FLUSH PRIVILEGES;
+EOSQL

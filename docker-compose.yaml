@@ -12,13 +12,16 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_DATABASE: live
-      MYSQL_USER: "massgateadmin"
+      MYSQL_USER: massgateadmin
       MYSQL_PASSWORD: "${MYSQL_WRITE_PASSWORD}"
+      MYSQL_WRITE_PASSWORD: "${MYSQL_WRITE_PASSWORD}"
+      MYSQL_READ_PASSWORD: "${MYSQL_READ_PASSWORD}"
     volumes:
-      - ./docker/mysql/databasestructure.sql:/docker-entrypoint-initdb.d/databasestructure.sql
+      - ./docker/mysql/00-users.sh:/docker-entrypoint-initdb.d/00-users.sh:ro
+      - ./docker/mysql/databasestructure.sql:/docker-entrypoint-initdb.d/databasestructure.sql:ro
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pp4nz3r_punk"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 5s
       timeout: 5s
       retries: 30

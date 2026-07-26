@@ -11,17 +11,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 CREATE DATABASE IF NOT EXISTS live;
 USE live;
 
-CREATE USER IF NOT EXISTS 'massgateadmin'@'localhost' IDENTIFIED BY '8fesfsdBOrwe';
-CREATE USER IF NOT EXISTS 'massgateadmin'@'%' IDENTIFIED BY '8fesfsdBOrwe';
-CREATE USER IF NOT EXISTS 'massgateclient'@'%' IDENTIFIED BY 'po389ef0sS';
-CREATE USER IF NOT EXISTS 'massgateclient'@'localhost' IDENTIFIED BY 'po389ef0sS';
-
-GRANT ALL PRIVILEGES ON live.* TO 'massgateadmin'@'localhost';
-GRANT ALL PRIVILEGES ON live.* TO 'massgateadmin'@'%';
-GRANT SELECT ON live.* TO 'massgateclient'@'localhost';
-GRANT SELECT ON live.* TO 'massgateclient'@'%';
-FLUSH PRIVILEGES;
-
 -- --------------------------------------------------------
 
 --
