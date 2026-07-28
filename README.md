@@ -1,5 +1,8 @@
 # World in Conflict Massgate
 
+> **Work in progress.** This project is still under development. Code on the
+> `master` branch may be unstable or not fully tested.
+
 This repository focuses on **containerizing** Massgate so the server is easy to
 run on modern hardware and infrastructure. It is not an attempt to rewrite or
 modernize the game logic itself.
