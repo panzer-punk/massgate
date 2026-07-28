@@ -41,7 +41,7 @@ services:
       - 80:80
     volumes:
       - ./docker/web/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./docker/web/www-root:/usr/share/nginx/html:ro
+      - ./www-root:/usr/share/nginx/html:ro
     networks:
       - massgate_network
 

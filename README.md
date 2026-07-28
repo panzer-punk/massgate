@@ -33,7 +33,7 @@ Services:
 | Service    | Port | Role                                       |
 |------------|------|--------------------------------------------|
 | `massgate` | 3001 | Massgate server                            |
-| `web`      | 80   | Patch / www-root static files              |
+| `web`      | 80   | Patch / `www-root` static files            |
 | `mysql`    | —    | MySQL 5.7                                  |
 
 On first start MySQL applies `docker/mysql/00-users.sh` and
