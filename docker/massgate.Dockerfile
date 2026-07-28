@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 AS linux-builder
+FROM debian:bookworm-slim AS linux-builder
 
 ARG MYSQL_CONNECTOR_URL=https://cdn.mysql.com/archives/mysql-connector-c/mysql-connector-c-6.1.11-win32.zip
 ARG MYSQL_HOME=/opt/mysql
@@ -65,15 +65,17 @@ RUN wineserver -p \
       -DMYSQL_LIBRARY=/opt/mysql/lib/libmysql.lib \
    && cmake --build .
 
-FROM ubuntu:24.04 AS linux-runner
+FROM debian:bookworm-slim AS linux-runner
+
+ENV WINEPREFIX=/app/.wine \
+    WINEARCH=win32 \
+    WINEDEBUG=-all
 
 RUN dpkg --add-architecture i386 \
    && apt-get update && apt-get install -y --no-install-recommends \
-      wine \
       wine32:i386 \
-      gettext \
-   && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/* \
-   && wine wineboot --init
+      gettext-base \
+   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 COPY --from=linux-builder /opt/mysql/lib/libmysql.dll /app/libmysql.dll
 COPY --chmod=755 ./docker/massgate/run.sh /app/run.sh
