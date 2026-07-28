@@ -7,6 +7,9 @@ services:
       - --character-set-server=utf8
       - --collation-server=utf8_general_ci
       - --skip-ssl
+      # Legacy schema uses '0000-00-00' datetime defaults; MySQL 5.7 rejects those
+      # under STRICT_TRANS_TABLES / NO_ZERO_DATE.
+      - --sql-mode=NO_ENGINE_SUBSTITUTION
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_DATABASE: live
