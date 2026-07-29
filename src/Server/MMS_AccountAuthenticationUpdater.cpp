@@ -152,48 +152,7 @@ MMS_AccountAuthenticationUpdater::myUpdateAllAuthentications()
 
 	currentUpdates.Sort(); // So we lower the risk of database deadlocks.
 
-
-	_set_printf_count_output(1); // enable %n
-
-	MDB_MySqlTransaction trans(*myWriteDatabaseConnection);
-
-	while(true)
-	{
-		unsigned int numUpdated = 0;
-		char query[4096*4];
-		// Build coalesced SQL query
-		while (numUpdated < numUpdates)
-		{
-			char* queryptr = query;
-			int len = 0;
-			sprintf(query, "UPDATE Authentication SET validUntil=DATE_ADD(NOW(), INTERVAL %u SECOND) WHERE tokenId IN (%n", MMS_Settings::NUM_SECONDS_BETWEEN_SECRETUPDATE+60, &len);
-			queryptr += len;
-			for (; (queryptr - query < sizeof(query) - 100) && (numUpdated < numUpdates); numUpdated++)
-			{
-				int len = 0;
-				sprintf(queryptr, "%u,%n", currentUpdates[numUpdated], &len);
-				queryptr += len;
-			}
-			strcpy(queryptr-1, ")");
-
-			MDB_MySqlResult res;
-			if (!trans.Execute(res, query))
-			{
-				break;
-			}
-		}
-		if (trans.Commit())
-		{
-		}
-		if (trans.ShouldTryAgain())
-		{
-			trans.Reset();
-		}
-		else
-		{
-			break;
-		}
-	}
+	//There was an authentification table, but it is not used anymore, so we keep the code here for reference.
 }
 
 void
