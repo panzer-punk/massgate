@@ -52,7 +52,7 @@ Compose builds `target: ${MASSGATE_OS}-runner`.
 
 | Value / target     | Status | Notes |
 |--------------------|--------|-------|
-| `linux` → `linux-runner` | Available | Default. Cross-builds the Win32 Massgate binary and runs it under Wine on Ubuntu. |
+| `linux` → `linux-runner` | Available | Default. Cross-builds the Win32 Massgate binary and runs it under Wine on Debian. |
 | `windows` → `windows-runner` | **Not implemented yet** (**recommended** long-term) | Native Windows container runner. Planned for the **1.0** release. |
 
 Until `windows-runner` ships, use `MASSGATE_OS=linux`.
@@ -79,6 +79,33 @@ For the dedicated server, set in `Wic_ds.ini`:
 ```
 [ReportToMassgate]
 1
+```
+
+## CD key
+
+The game and dedicated server read the CD key from the Windows registry.
+This stack ships with a development key already present in MySQL (`CdKeys`);
+install the same key on the client (or DS) machine:
+
+```
+LABG-U3MF-RG9G-95GB-AYTH
+```
+
+Registry path:
+
+```
+HKEY_CURRENT_USER\Software\Massive Entertainment AB\World In Conflict
+"CDKEY"="LABG-U3MF-RG9G-95GB-AYTH"
+```
+
+Save the following as a `.reg` file and merge it, or set the value manually
+with `regedit`:
+
+```reg
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Massive Entertainment AB\World In Conflict]
+"CDKEY"="LABG-U3MF-RG9G-95GB-AYTH"
 ```
 
 ## Contributing
